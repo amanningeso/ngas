@@ -777,7 +777,9 @@ class MirrexecCommandSender(threading.Thread):
             }
 
             start_time = time.time()
-            response = ngamsHttpUtils.httpGet(host, int(port), 'MIRREXEC', pars=pars, timeout=self.rx_timeout)
+            # this is a potentially long-running command. There is no timeout applied here, it can take as long as necessary.
+            # Should probably be asynchronous. We are planning a re-think anyway. 
+            response = ngamsHttpUtils.httpGet(host, int(port), 'MIRREXEC', pars=pars)
             with contextlib.closing(response):
                 failed = response.status != NGAMS_HTTP_SUCCESS or NGAMS_FAILURE in utils.b2s(response.read())
             elapsed_time = time.time() - start_time
