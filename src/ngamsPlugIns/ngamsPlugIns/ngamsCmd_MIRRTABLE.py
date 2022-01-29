@@ -192,8 +192,9 @@ def execute_mirroring(ngams_server, iteration):
             'n_threads': get_num_simultaneous_fetches_per_server(ngams_server)
         }
         host, port = ngams_server.get_self_endpoint()
+        # we do not set a timeout here, as MIRREXEC could be a very long-running operation
+        ngamsHttpUtils.httpGet(host, port, 'MIRREXEC', pars=pars)
         # TODO: look at the HTTP response code
-        ngamsHttpUtils.httpGet(host, port, 'MIRREXEC', pars=pars, timeout=rx_timeout)
     except Exception:
         logger.exception("MIRREXEC command for iteration %d has failed", iteration)
     finally:
